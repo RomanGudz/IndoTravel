@@ -2,6 +2,7 @@ import createElement from './module/createElement.js';
 import timer from './module/timer.js';
 import './module/accordion.js';
 import './module/headerMenu.js';
+import './module/fly.js';
 
 const {
   timerPage,
