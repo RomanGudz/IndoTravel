@@ -10,15 +10,15 @@ textWrapper.forEach(elem => {
 
 itemsTitleBtn.forEach((btn, index) => {
   btn.addEventListener('click', () => {
-    for (let i = 0; i < items.length; i++) {
-      if (index === i) {
-        textWrapper[i].style.height = items[i].classList.contains('travel__item_active') ?
+    items.forEach((_, idx) => {
+      if (index === idx) {
+        textWrapper[idx].style.height = items[idx].classList.contains('travel__item_active') ?
           '' : `${heightWrapper}px`;
-        items[i].classList.toggle('travel__item_active');
+        items[idx].classList.toggle('travel__item_active');
       } else {
-        textWrapper[i].style.height = '';
-        items[i].classList.remove('travel__item_active');
+        textWrapper[idx].style.height = '';
+        items[idx].classList.remove('travel__item_active');
       }
-    }
+    })
   });
 });
