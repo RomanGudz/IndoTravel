@@ -3,6 +3,7 @@ import timer from './module/timer.js';
 import './module/accordion.js';
 import './module/headerMenu.js';
 import './module/fly.js';
+import './module/dbBase.js';
 
 const {
   timerPage,

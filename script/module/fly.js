@@ -17,7 +17,6 @@ const calcpositionFly = () => {
   const maxScroll = docElem.scrollHeight - docElem.clientHeight;
   const percentScroll = (window.scrollY * 100) / maxScroll;
   const height = maxHeight * (percentScroll / 100);
-  console.log('height: ', percentScroll);
   if (Math.round(percentScroll) === 100) {
     flyВirection = true;
   } else if (percentScroll === 0) {
