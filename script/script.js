@@ -4,6 +4,7 @@ import './module/accordion.js';
 import './module/headerMenu.js';
 import './module/fly.js';
 import './module/dbBase.js';
+import './module/sendFormReservation.js';
 
 const {
   timerPage,
