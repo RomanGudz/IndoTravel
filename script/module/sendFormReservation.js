@@ -42,6 +42,7 @@ form.addEventListener('submit', e => {
       form.textContent = `Ошибка отправки формы ${err}`;
       return
     }
+    createModal(data.body.nameContact);
     form.textContent = `Ваша заявка ${data.body.nameContact}, успешно отправлена`;
   })
   form.reset()
@@ -77,4 +78,15 @@ footerForm.addEventListener('submit', e => {
     footerForm.append(createh2, createP);
   })
   footerForm.reset()
-})
+});
+
+const createModal = (name) => {
+  const createDiv = document.createElement('div');
+  const createH2 = document.createElement('h2');
+  const createP = document.createElement('p');
+  createH2.textContent = 'Спасибо что выбрали нас.'
+  createP.textContent = `Ваша заявка ${name}, успешно отправлена.`;
+  createDiv.append(createH2, createP);
+
+  return createDiv;
+};
