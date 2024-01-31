@@ -42,8 +42,8 @@ form.addEventListener('submit', e => {
       form.textContent = `Ошибка отправки формы ${err}`;
       return
     }
-    createModal(data.body.nameContact);
-    form.textContent = `Ваша заявка ${data.body.nameContact}, успешно отправлена`;
+    form.prepend(createModal(data.body.nameContact));
+    // form.textContent = `Ваша заявка ${data.body.nameContact}, успешно отправлена`;
   })
   form.reset()
 });
@@ -81,12 +81,17 @@ footerForm.addEventListener('submit', e => {
 });
 
 const createModal = (name) => {
-  const createDiv = document.createElement('div');
+  const containerDiv = document.createElement('div');
+  const creeteDiv = document.createElement('div');
   const createH2 = document.createElement('h2');
   const createP = document.createElement('p');
+  containerDiv.style = 'width: 100%; height: 100%; position: relative; z-index: 1000;';
+  createH2.style = "width: 580px; left: 200px;  position: absolute; text-align: center; color: #303030; font-size: 34px; font-family: Merriweather; font-weight: 400; line-height: 51px; letter-spacing: 0.68px; word-wrap: break-word";
   createH2.textContent = 'Спасибо что выбрали нас.'
+  creeteDiv.style = 'width: 980px; height: 309px; left: 0px; top: 0px; position: absolute; background: white; border-radius: 30px; border: 1px #AFAFAF solid';
   createP.textContent = `Ваша заявка ${name}, успешно отправлена.`;
-  createDiv.append(createH2, createP);
-
-  return createDiv;
+  createP.style = "width: 580px; left: 200px; top: 77px; position: absolute; text-align: center; color: #303030; font-size: 34px; font-family: Merriweather; font-weight: 400; line-height: 51px; letter-spacing: 0.68px; word-wrap: break-word";
+  creeteDiv.append(createH2, createP);
+  containerDiv.append(creeteDiv);
+  return containerDiv;
 };
