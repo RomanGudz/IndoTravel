@@ -1,51 +1,77 @@
+import modal from './modal.js';
 const URL = 'https://jsonplaceholder.typicode.com/posts';
 
-const sendServer = (body, calback) => {
+const sendServer = async (url, {
+  method,
+  calback,
+  body,
+  headers,
+}) => {
   try {
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', URL);
-    xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.addEventListener('load', () => {
-      if (xhr.status < 200 || xhr.status >= 300) {
-        calback(new Error(xhr.status), xhr.response);
-        return;
-      }
-      const data = JSON.parse(xhr.response);
-      calback(null, data)
-    });
-    xhr.addEventListener('error', () => {
-      calback(new Error(xhr.status), xhr.response)
-    });
-    xhr.send(JSON.stringify(body));
+    const options = {
+      method,
+    };
+    if (body) options.body = JSON.stringify(body);
+    if (headers) options.headers = headers;
+    const response = await fetch(url, options);
+
+    if (response.ok) {
+      const data = await response.json();
+      if (calback) return calback(null, data);
+      return;
+    };
+    throw new Error(response.statusText);
   } catch (err) {
-    calback(new Error(err));
-  }
+    return calback(err);
+  };
 };
 
 const form = document.querySelector('.reservation__form');
 const totalPrice = document.querySelector('.reservation__price');
+const reservationDate = document.querySelector('.reservation__data');
+const buttonForm = document.querySelector('.reservation__button');
 
-form.addEventListener('submit', e => {
+form.addEventListener('submit', async e => {
   e.preventDefault();
-  const target = e.target
+  const target = e.target;
   const formData = new FormData(target);
   formData.set('nameContact', target.reservation__name.value);
   formData.set('phoneContact', target.reservation__phone.value);
   formData.set('totalPrice', totalPrice.textContent);
   const newReservation = Object.fromEntries(formData);
-
-  sendServer({
-    title: target.children[0].textContent,
-    body: newReservation,
-  }, (err, data) => {
-    if (err) {
-      console.warn(err, data);
-      falledMessage();
-      return;
-    }
-    showModal();
-  })
-  form.reset()
+  if (target.classList.contains('reservation__form')) {
+    const ShowModal = await modal(newReservation);
+    if (ShowModal) {
+      await sendServer(URL, {
+        method: 'POST',
+        body: {
+          title: target.children[0].textContent,
+          body: newReservation,
+        },
+        calback(err, data) {
+          if (err) {
+            falledMessage();
+            console.warn(err, data);
+          }
+        },
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+      totalPrice.textContent = '';
+      reservationDate.textContent = '';
+      target.reservation__phone.value = '';
+      target.reservation__name.value = '';
+      target.reservation__date.value = '';
+      target.reservation__people.value = '';
+      showModal();
+      target.reservation__phone.setAttribute('disabled', true);
+      target.reservation__name.setAttribute('disabled', true);
+      target.reservation__date.setAttribute('disabled', true);
+      target.reservation__people.setAttribute('disabled', true);
+      buttonForm.setAttribute('disabled', true);
+    };
+  };
 });
 
 const footerForm = document.querySelector('.footer__form');
@@ -72,7 +98,7 @@ footerForm.addEventListener('submit', e => {
     if (err) {
       console.warn(err, data);
       form.textContent = `Ошибка отправки формы ${err}`;
-      return
+      return;
     }
     footerForm.innerHTML = '';
     footerForm.append(createh2, createP);
