@@ -30,6 +30,21 @@ const form = document.querySelector('.reservation__form');
 const totalPrice = document.querySelector('.reservation__price');
 const reservationDate = document.querySelector('.reservation__data');
 const buttonForm = document.querySelector('.reservation__button');
+const inputName = document.querySelector('#reservation__name');
+const inputPhone = document.querySelector('#reservation__phone');
+
+inputName.addEventListener('input', () => {
+
+  const validInputName = inputName.value.split(/\s+/).length >= 3 ? '.+' : '';
+  console.log('validInputName: ', validInputName)
+  inputName.setAttribute('pattern', validInputName);
+  inputName.value = inputName.value.replace(/[^А-Яа-я\s]/g, '');
+});
+
+inputPhone.addEventListener('input', () => {
+  inputPhone.value = inputPhone.value.replace(/[^\d\+]/g, '');
+});
+
 
 form.addEventListener('submit', async e => {
   e.preventDefault();
