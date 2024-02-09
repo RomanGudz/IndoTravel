@@ -33,10 +33,40 @@ const buttonForm = document.querySelector('.reservation__button');
 const inputName = document.querySelector('#reservation__name');
 const inputPhone = document.querySelector('#reservation__phone');
 
+const maskTel = new Inputmask('+7 (999)-999-99-99');
+maskTel.mask(inputPhone);
+
+const justValidate = new JustValidate('.reservation__form');
+
+justValidate
+  .addField('#reservation__date', [
+    {
+      rule: 'required',
+      errorMessage: 'Укажите дату поездки'
+    }
+  ])
+  .addField('#reservation__people', [
+    {
+      rule: 'required',
+      errorMessage: 'Укажите сколько будет человек'
+    }
+  ])
+  .addField('.reservation__input_name', [
+    {
+      rule: 'required',
+      errorMessage: 'Укажите ваше ФИО'
+    }
+  ])
+  .addField('#reservation__phone', [
+    {
+      rule: 'required',
+      errorMessage: 'Укажите ваш телефон'
+    }
+  ])
+
 inputName.addEventListener('input', () => {
 
   const validInputName = inputName.value.split(/\s+/).length >= 3 ? '.+' : '';
-  console.log('validInputName: ', validInputName)
   inputName.setAttribute('pattern', validInputName);
   inputName.value = inputName.value.replace(/[^А-Яа-я\s]/g, '');
 });
